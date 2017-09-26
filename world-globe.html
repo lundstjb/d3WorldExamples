@@ -189,6 +189,31 @@ select {
       })();
     });
 
+  isRotating = false;
+
+  d3.select('#rotateButton').on('click', function() {
+    isRotating = true;
+    rotateGlobe();
+  });
+  d3.select('#stopRotateButton').on('click', function() {
+    isRotating = false;
+  });
+
+    function rotateGlobe() {
+      if(isRotating) {
+      var rotation = projection.rotate();
+      rotation[0] += 0.5;
+      // if (rotation[0] >= 180) {
+      //   rotation[0] = 360
+      // };
+      projection.rotate(rotation);
+      svg.selectAll("path.land").attr("d", path);
+      svg.selectAll(".focused").classed("focused", focused = false);
+
+      setTimeout(function() { rotateGlobe(); }, 10);
+}
+    }
+
     function country(cnt, sel) {
       for(var i = 0, l = cnt.length; i < l; i++) {
         if(cnt[i].id == sel.value) {return cnt[i];}
@@ -198,5 +223,11 @@ select {
   };
   </script>
   <div id="countryInfo"></div>
+  <input id="rotateButton"
+           type="button"
+           value="Start Rotation" />
+  <input id="stopRotateButton"
+                    type="button"
+                    value="Stop Rotation" />
 </body>
 </html>
